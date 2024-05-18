@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { CiShoppingCart } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 
+import { useDispatch } from 'react-redux';
+import { addtoCart } from '../feathers/cartSlice';
 interface CardProps {
     item: { 
       id: number,
@@ -14,6 +16,12 @@ interface CardProps {
   }
   
   const Card = ({ item }: CardProps) => {
+    const dispatch = useDispatch()
+    const handleIncrementCart = () => {
+        dispatch(addtoCart(item))
+      };
+    
+    
     return (
       <div className="max-w-sm  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-between">
 
@@ -26,8 +34,8 @@ interface CardProps {
     />
   </Link>
   <div className='p-2 '>
-  <CiShoppingCart className='text-2xl mt-2 cursor-pointer ' onClick={() => console.log('shipped')
-  } />
+  <CiShoppingCart className='text-2xl mt-2 cursor-pointer' onClick={() => handleIncrementCart(item)} />
+
   <CiHeart className='text-2xl mt-2' />
 
   </div>

@@ -5,9 +5,11 @@ import Store from "./Pages/Store";
 import ErrorPage from './Pages/404'
 import SingleProductPage from "./Pages/SingleProductPage";
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
-import React from "react";
-const ThemeContext = React.createContext('light');
-
+import { Provider } from "react-redux";
+import  { SetStateAction, useState } from "react";
+import { AppContext } from "../src/AppContext";
+import { configureStore } from "@reduxjs/toolkit";
+import cartReducer from "./feathers/cartSlice";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,11 +31,22 @@ const router = createBrowserRouter([
 ]);
 {router}
 function App() {
+  const store = configureStore({
+    reducer:{
+      cart: cartReducer,
+    }
+  })
+  const [isCartCount, setCartCount] = useState(0)
+  const updateCartCount = (newCount: SetStateAction<number>) => {
+    setCartCount(newCount);
+  };
   return (
     <>
- <ThemeContext.Provider value="dark"> {/* Providing the dark theme */}
+      <AppContext.Provider value={{ isCartCount, updateCartCount }}>
+        <Provider store= {store}>
       <RouterProvider router={router}/>
-    </ThemeContext.Provider>    </>
+      </Provider>
+    </AppContext.Provider>    </>
   );
 }
 
